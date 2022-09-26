@@ -1,7 +1,7 @@
 ##### git移动文件操作
 
 ```shell
-git mv gitTest.md ./dir/gitTest.md
+git mv gitTest.md dir
 git commit -m "备注"
 git push 远程仓库名 分支名
 ```
@@ -11,8 +11,7 @@ git push 远程仓库名 分支名
 移动文件还可以使用以下操作实现：
 
 ```
-git add ./dir/gitTest.md
-git rm gitTest.md
+git mv ./dir/gitTest.md
 ```
 
 
@@ -25,6 +24,18 @@ git commit -m "备注"
 git push 远程仓库名 分支名
 ```
 
-在仓库中手动添加文件后，使用
+在仓库中手动添加文件后，使用`git add`操作将file.txt添加到逻辑区，随后提交到分支中，最后推送远程仓库。
 
-1111
+
+
+##### 删除文件操作
+
+```shell
+git rm vue/s.txt
+git commit -m "备注"
+git push 远程仓库名 分支名
+```
+
+使用`git rm`操作删除本地仓库中vue目录下的`s.txt`文件，随后提交到分支中，最后推送远程仓库
+
+![image-20220926143412174](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261439341.png)
