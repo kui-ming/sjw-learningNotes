@@ -16,13 +16,13 @@
 
 - **项目目录**
 
-![image-20220315104650603](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220315104650603.png)
+![image-20220315104650603](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261136377.png)
 
 
 
 - **application.properties内容：**
 
-![image-20220315104939526](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220315104939526.png)
+![image-20220315104939526](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261136378.png)
 
 
 
@@ -38,7 +38,7 @@
 
 - **项目目录**
 
-![image-20220315105242083](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220315105242083.png)
+![image-20220315105242083](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261136380.png)
 
 > 这里我配置了两种环境，包括dev(开发)环境和demo(演示)环境
 
@@ -46,13 +46,13 @@
 
 - **application-demo.properties内容**
 
-![image-20220315105440387](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220315105440387.png)
+![image-20220315105440387](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261136381.png)
 
 
 
 - **application-dev.properties内容**
 
-  ![image-20220315105606516](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220315105606516.png)
+  ![image-20220315105606516](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261136382.png)
 
 
 
@@ -62,7 +62,7 @@
 
 - **pom截图**
 
-![image-20220315110309099](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220315110309099.png)
+![image-20220315110309099](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261136383.png)
 
 > 在pom中配置两个环境的约束配置项，并将dev环境设置为默认环境
 
@@ -134,7 +134,7 @@
 
 ###### 第五步，此时就点开IDEA右侧的Maven选项卡，找到profiles选项，选择自己当前的环境了
 
-![image-20220315111456635](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220315111456635.png)
+![image-20220315111456635](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261136384.png)
 
 > 直接通过点击复选框来选择自己当前的环境，如果没有自动修改，记得刷新一下
 
@@ -144,4 +144,4 @@
 
 ​	在Profiles选项中选择需要的环境，然后选择clean和install并点击运行
 
-![image-20220315111940157](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220315111940157.png)
+![image-20220315111940157](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261136385.png)
