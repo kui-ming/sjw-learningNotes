@@ -101,7 +101,7 @@
 
 ###### 第四步，在pom.xml中配置< resource >，使得项目找到指定资源
 
-![image-20220523170853431](F:\word\MD本地博客\SpringBoot多环境配置.assets\image-20220523170853431.png)
+![image-20220523170853431](https://github.com/kui-ming/sjw-learningNotes/blob/main/SpringBoot%E5%A4%9A%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE.assets/image-20220523170853431.png?raw=true)
 
 **相关配置项代码**
 
