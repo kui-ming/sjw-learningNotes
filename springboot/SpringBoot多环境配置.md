@@ -10,13 +10,11 @@
 
  4. 配置在IDEA中的Maven3.52
 
-
-
 ###### 第一步，创建配置文件application.yaml 或 application.properties
 
 - **项目目录**
 
-![image-20220315104650603](https://cdn.jsdelivr.net/gh/kui-ming/tuchuang/images202209261136377.png)
+![image-20220315104650603](https://cdn.staticaly.com/gh/kui-ming/tuchuang@main/images202209261136377.png)
 
 
 
