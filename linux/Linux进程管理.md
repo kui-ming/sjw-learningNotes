@@ -18,21 +18,21 @@
 
 `cd/etc` 切换目录不创建进程
 
-![image-20220414143503494](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220414143503494.png)
+![image-20220414143503494](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210261131888.png)
 
 `ls` 创建进程
 
-![image-20220414143536414](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220414143536414.png)
+![image-20220414143536414](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210261131889.png)
 
 `echo` 创建进程
 
-![image-20220414143847516](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220414143847516.png)
+![image-20220414143847516](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210261131890.png)
 
 启动前台进程
 
 ​	在终端中输入命令，例如`ls -l`
 
-![image-20220414143136715](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220414143136715.png)
+![image-20220414143136715](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210261131891.png)
 
 启动后台进程
 
@@ -48,7 +48,7 @@
 
   		1. 运行 `top&` 命令， 将性能监控工具放在后台运行
 
-![image-20220414150145268](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220414150145268.png)
+![image-20220414150145268](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210261131893.png)
 
 > 使用 `命令&` 方式运行在后台的命令在终端关闭后自动停止运行
 >
@@ -58,7 +58,7 @@
 
 2.  运行`nohup ls&` 
 
-![image-20220414154840766](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220414154840766.png)
+![image-20220414154840766](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210261131894.png)
 
 > 使用 `nohup` 指令挂入后台的进程不会因终端断开而结束
 
@@ -68,7 +68,7 @@
 
 举例 `ls&`
 
-![image-20220414155419681](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220414155419681.png)
+![image-20220414155419681](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210261131895.png)
 
 
 
@@ -80,4 +80,4 @@
 
 ​	举例：先使用 `top&` 开启一个后台进程，然后使用 `jobs` 查看
 
-![image-20220414160349814](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220414160349814.png)
+![image-20220414160349814](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210261131896.png)

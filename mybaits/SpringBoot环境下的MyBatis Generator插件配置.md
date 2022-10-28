@@ -390,4 +390,4 @@
 
 ### 三、运行MyBatis Generator
 
-![image-20220422112323613](C:\Users\15675\AppData\Roaming\Typora\typora-user-images\image-20220422112323613.png)
+![image-20220422112323613](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210250903286.png)
