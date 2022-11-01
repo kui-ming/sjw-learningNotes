@@ -1,0 +1,136 @@
+# SpringBoot配置自定义配置文件以及找不到配置文件的问题
+
+>今天给github提交项目时收到该网站的邮件，说把微信的秘钥信息也提交上去了，我发现我把我的AppID和APPSecret直接写在类里提交上去了，这显然是不对的。于是我决定把这些信息写在自定义配置文件中，并让Git忽略掉这个文件，以此来解决这个问题。可在设置配置文件的时候老是报该文件不存在，我很费解，明明classpath是对的，为什么不存在！
+
+
+
+#### 配置自定义YAML文件并读取
+
+##### 1、在resources文件夹下添加wx_key.yml
+
+![image-20221101195807250](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202211012030660.png)
+
+
+
+##### 2、新增PropertySourceFactory接口的YMAL文件实现类（直接在CSDN上复制的代码）
+
+```java
+public class YAMLPropertySourceFactory implements PropertySourceFactory {
+
+    @Override
+    public PropertySource<?> createPropertySource(String name, EncodedResource encodedResource) throws IOException {
+        //创建一个YAML解析工厂。
+        YamlPropertiesFactoryBean factory = new YamlPropertiesFactoryBean();
+        //设置资源。
+        factory.setResources(encodedResource.getResource());
+        //获取解析后的Properties对象
+        Properties properties = factory.getObject();
+        //返回。此时不能像默认工厂那样返回ResourcePropertySource对象 ，要返回他的父类PropertiesPropertySource对象。
+        return name != null ? new PropertiesPropertySource(name, properties) :
+                new PropertiesPropertySource(encodedResource.getResource().getFilename(),properties);
+    }
+}
+```
+
+
+
+##### 3、增加对应的实体类：WXKey
+
+```java
+import com.example.csust_hot_wall.configuration.YAMLPropertySourceFactory;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+
+@Data
+@Component
+@PropertySource(value = "classpath:/wx_key.yml", factory = YAMLPropertySourceFactory.class)
+@ConfigurationProperties(value = "wx")
+public class WXKey {
+    private String id;
+    private String secret;
+}
+```
+
+
+
+##### 4、在相关类中通过自动注入的方式获得微信秘钥
+
+```java
+public class OpenIdManage {
+    
+    @Autowired
+    WXKey wxKey;
+
+    public JSONObject getOpenId(String code){
+        System.out.println(wxKey);
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid="
+                + wxKey.getId() +
+                "&secret="
+                + wxKey.getSecret() +
+                "&js_code="
+                + code +
+                "&grant_type=authorization_code";
+        WebClient webClient = WebClient.create();
+        Mono<String> mono = webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(String.class);
+        String result = mono.block();
+        System.out.println();
+        return JSONObject.parseObject(result);
+    }
+    
+    ……
+        
+}
+
+```
+
+
+
+##### 结果：报没有找到该配置文件的错误！
+
+```java
+……
+Caused by: java.io.FileNotFoundException: class path resource [wx_key.yml] cannot be opened because it does not exist
+	at org.springframework.core.io.ClassPathResource.getInputStream(ClassPathResource.java:180) ~[spring-core-5.2.12.RELEASE.jar:5.2.12.RELEASE]
+	at org.springframework.beans.factory.config.YamlProcessor.process(YamlProcessor.java:199) ~[spring-beans-5.2.12.RELEASE.jar:5.2.12.RELEASE]
+	... 26 common frames omitted
+```
+
+
+
+#### FileNotFoundException：配置文件未存在的原因
+
+> 这个BUG我找了半个小时，我甚至一个个字的对文件名，一个个classpath路径的看。这看了运行时的classpath路径后才发现，没有一个路径指向src/main/resources，它指向的是target/classes，这个项目编译后生成的路径，然后我在里面果然找不到我的配置文件
+
+##### 原因
+
+​	经过半小时的BUG查找，发现是我在之前配置多环境时在pom.xml文件中改动了默认的resources，并启动了过滤，导致wx_key.yml文件没有被编译，于是我在pom.xml文件中添加了所有的yml文件
+
+```xml
+	……
+		<resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>application-${profileActive}.properties</include>
+                    <include>application.properties</include>
+                    <include>**/*.xml</include>
+                    <!-- 为了加入我的自定义配置文件而增加 -->
+                    <include>**/*.yml</include>
+                </includes>
+                <!--过滤一定要开-->
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+……
+```
+
+##### 结果
+
+启动成功，毫无问题！
+
+![image-20221101202942171](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202211012030662.png)
