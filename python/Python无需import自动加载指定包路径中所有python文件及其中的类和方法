@@ -1,0 +1,168 @@
+# Python无需import自动加载指定包路径中所有python文件及其中的类和方法
+
+> 我需要更新我的公众号，使它具备查询课表、查询电费及查询未完成作业的功能。这些功能使用爬虫实现，如果写在一两个文件里就太杂了，为进行解耦和便于扩展功能，准备更新下项目架构。具体是将每个功能写成一个类，然后通过分配器来决定实现哪个功能。当接收用户的数据后，经过分配器调用所有的功能，然后由每个功能的解析器解析用户文本，如果符合本功能就继续执行，直到返回结果，如果不符合则返回空，让分配器继续执行下一个功能。问题来了，我不想一个个将每个功能类导入到执行器脚本中，于是想试试是否能自动自动读取相关包中的对应功能类，形成一个列表。于是产生此文
+
+
+
+#### 第一步，准备文件
+
+##### 项目目录		
+
+​		因为还是测试，所以比较简陋，准备一个text.py作为分配器使用，新建一个名为functions的包，其中每个python文件中存在一个类，为一个功能，这些类继承自一个父类BaseFunction
+
+![image-20221102150005348](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202211021518077.png)
+
+##### functions.BaseFunction.py
+
+```python
+class BaseFunction:
+    def run(self):
+        return None
+```
+
+##### functions.CurriculumFunction.py
+
+```python
+from functions.BaseFunction import BaseFunction
+
+
+class Curriculum(BaseFunction):
+
+    def run(self):
+        return "查询到课表"
+
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance:
+            cls.__instance = object.__new__(cls)
+        return cls.__instance
+
+```
+
+##### functions.HomeworkFunction.py
+
+```python
+from functions.BaseFunction import BaseFunction
+
+
+class Homework(BaseFunction):
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance:
+            cls.__instance = object.__new__(cls)
+        return cls.__instance
+
+```
+
+##### functions.__ init __.py（自动加载的重要文件)
+
+​	通过`pkgutil`包的`iter_modules`方法找到functions包中的所有python文件（模块），然后加载这些模块，并通过内置方法`__dir__()`来找到该模块中的所有方法和类名，随后通过`getattr()`方法获取到可用的类对象组成功能列表，供分配器使用
+
+```python
+import pkgutil
+from functions.BaseFunction import BaseFunction
+
+# 定义功能列表，供分配器调用
+fun_list = []
+# 利用包管理组件循环遍历出指定路径下的所有python文件，返回一个三元元组（文件查询器，文件名，是否为包）
+for file_finder, name, ispkg in pkgutil.iter_modules(__path__):
+    # 通过文件查询器和当前文件名找到该python脚本，并加载到变量fun中
+    fun = file_finder.find_module(name).load_module(name)
+    # 通过__dir__()找到该脚本中所有的方法和类名，包括所有以双下划线开头的方法
+    for attr_name in fun.__dir__():
+        # 排除掉系统方法
+        if "__" in attr_name:
+            continue
+        # 排除掉所有功能的父类
+        if "BaseFunction" in attr_name:
+            continue
+        # 通过getattr获取到这个方法或类
+        attr = getattr(file_finder.find_module(name).load_module(name), attr_name)
+        # 抛弃类型为function的方法
+        if type(attr) == type:
+            # 遍历该类的所有父类，如果继承了BaseFunction则添加到功能列表
+            for parent in attr.__bases__:
+                if parent == BaseFunction:
+                    fun_list.append(attr)
+
+```
+
+##### text.py
+
+```python
+from functions import fun_list
+
+print(fun_list)
+
+
+def distributor():
+    for fun in fun_list:
+        res = fun().run()
+        if res:
+            print("返回数据", res)
+            return
+    print("未找到对应功能")
+    return
+
+
+distributor()
+```
+
+
+
+#### 第二步，测试
+
+##### 运行text.py
+
+![image-20221102151125927](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202211021518079.png)
+
+```powershell
+[<class 'CurriculumFunction.Curriculum'>, <class 'HomeworkFunction.Homework'>]
+返回数据 查询到课表
+```
+
+
+
+##### 将Curriculum的run方法置空，改变Homework类
+
+修改后的Homework
+
+```python
+class Homework(BaseFunction):
+
+    def run(self):
+        return "查询到未做的作业！"
+
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance:
+            cls.__instance = object.__new__(cls)
+        return cls.__instance
+
+```
+
+重新运行
+
+![image-20221102151419310](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202211021518080.png)
+
+```powershell
+[<class 'CurriculumFunction.Curriculum'>, <class 'HomeworkFunction.Homework'>]
+返回数据 查询到未做的作业！
+```
+
+
+
+##### 将Curriculum和Homework的run方法都置空
+
+​		结果
+
+![image-20221102151634614](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202211021518081.png)
+
+```powershell
+[<class 'CurriculumFunction.Curriculum'>, <class 'HomeworkFunction.Homework'>]
+未找到对应功能
+```
+
