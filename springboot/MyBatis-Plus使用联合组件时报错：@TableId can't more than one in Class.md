@@ -33,7 +33,7 @@ Caused by: com.baomidou.mybatisplus.core.exceptions.MybatisPlusException: @Table
 <dependency>
             <groupId>com.github.jeffreyning</groupId>
             <artifactId>mybatisplus-plus</artifactId>
-            <version>1.7.0-RELEASE</version>
+            <version>1.5.1-RELEASE</version>
 </dependency>
 ```
 
@@ -109,3 +109,9 @@ public class LikesServiceImpl extends MppServiceImpl<LikesMapper, Likes>
 #### 第五步：在启动类上添加注解@EnableMPP
 
 ​	之后可以使用`selectByMultiId`、`updateBatchByMultiId`、`deleteByMultiId`、`saveOrUpdateByMultiId`等方法操作此数据库表
+
+
+
+##### 注意
+
+我发现1.7版本和1.6版本都不能正常的完成任务，我只能使用1.5版本来实现

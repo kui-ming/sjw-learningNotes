@@ -98,6 +98,7 @@ print(fun_list)
 
 
 def distributor():
+    # 这里可以当做一个责任列表模式，当前面的功能不能满足需求时继续执行后面的功能
     for fun in fun_list:
         res = fun().run()
         if res:
