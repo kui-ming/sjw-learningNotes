@@ -75,6 +75,8 @@ systemctl start firewalld.service
 
 ```sh
 firewall-cmd --add-port=3306/tcp --permanent	# 开放3306端口
+firewall-cmd --add-port=7000-7100/tcp --permanent	# 开放7000到7100的所有端口
+firewall-cmd --add-port=7000/tcp --add-port=7001/tcp --permanent	# 开放7000和7001两个端口
 ```
 
 ![image-20221027213648145](https://cdn.staticaly.com/gh/kui-ming/tuchuang/main/images202210272136067.png)
